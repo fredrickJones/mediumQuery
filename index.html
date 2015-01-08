@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<head>
+	<title>https://medium.com/@roblcopeland/understanding-rwd-breakpoints-fc4f72cd8b57</title>
+	<link rel="stylesheet" type="text/css" href="normalize.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<header>
+		<div class="header--logo">
+			<span class="logo"></span>
+		</div>
+	</header>
+	<section>
+		<div class="top-image">
+			<img class="title--image" src="https://d262ilb51hltx0.cloudfront.net/fit/t/1200/504/0*Dtzv_xYGpIbRatig.png">
+		</div>
+	</section>
+	<main>
+		<div class="headline">
+			<h1>Understanding RWD Breakpoints</h1>
+			<h3>and then doing them in Susy</h3>
+		</div>
+		<div class="body-type">
+			<p>I had a hard time figuring out how to setup a responsive layout with breakpoints using Susy, so I figured I’d share what I’ve figured out so far.</p>
+			<p>When we want to make a mobile-first, responsive layout, we need to be able to react to the width of the screen getting too big for our default layout.</p>
+			<p>The best practice currently is to come up with a certain width that your layout seems to break, and to set a <em>break point</em> there.</p>
+			<p>A <em>break point</em> is the point at which the width of the user’s screen will cause your layout to change. For example, your default narrow layout might have two sections stacked on top of each other, but if a user views your site at a width of say, 700 pixels, the two sections will be side-by-side instead. At 700 pixels, you have a <em>break point</em>.</p>
+			<p>In plain ‘ol CSS, you would implement your break point using a media query, but using SASS, Compass, and Susy we can do better.</p>
+			<p>Using Susy in a Compass project, we would likely have a default layout setup like this:(fyi, I’m using .scss syntax)</p>
+			<div class="box-out">
+				<p>// grid defaults<br>
+					$total-columns: 5;<br>
+					$column-width: 6em;<br>
+					$gutter-width: 1em;<br>
+					$grid-padding: $gutter-width;</p>
+				<p>.page {<br>
+				     //a mixin to let me see the grid<br>
+     				@include susy-grid-background;<br>
+     				// setup the containing element<br>
+     				@include container;</p>
+     			<p>.one,.two {<br>
+     				@include pre(1);<br>
+       				@include span-columns(3 omega);<br>
+        			@include post(1);<br>
+        			}<br>
+        			}</p>
+			</div>
+			<p>That gives me a layout that looks like this:</p>
+			<div class="example-diagram first">
+				<img src="https://d262ilb51hltx0.cloudfront.net/max/800/0*rW0PpAd3ytt42j45.png">
+				<p class="discription">Some content in the middle, a column on each side.</p>
+			</div>
+			<p>So let’s say that at 700 pixels wide, that the layout starts to look too wide and we want the two boxes to be side-by-side.</p>
+			<p>First, we’ll define a break point in a SASS variable, like this:</p>
+			<p>$wide: 700px 5;</p>
+			<p>This tells SASS that at 700 pixels, we want to have a break point and to have 5 columns in our layout. We can change the number of columns at our break points, but for this example we don’t need to.</p>
+			<p>We can use this break point variable inline with the rest of the sass. We do that by using the at-breakpoint mixin.</p>
+			<p>What I want to do is to use the at-breakpoint mixin to tell SASS that at the $wide breakpoint, that .one and .two should no longer have a pre(1) and should span two columns each, side-by-side.</p>
+			<p>I can do that like this:</p>
+			<div class="box-out">
+				<p>// grid defaults<br>
+					$total-columns: 5;<br>
+					$column-width: 6em;<br>
+					$gutter-width: 1em;<br>
+					$grid-padding: $gutter-width;</p>
+				<p><strong>// breakpoints<br>
+					$wide: 700px 5;</strong></p>
+				<p>.page {<br>
+				     //a mixin to let me see the grid<br>
+     				@include susy-grid-background;<br>
+     				// setup the containing element<br>
+     				@include container;</p>
+     			<p>.one,.two {<br>
+     				@include pre(1);<br>
+       				@include span-columns(3 omega);<br>
+        			@include post(1);<br>
+        			<strong>@include at-breakpoint($wide) {<br>
+					//remove column width margin-left<br>
+					@include pre(0);<br>
+					//remove omega, we get side-by-side<br>
+					@include span-columns(2);<br>
+					}</strong><br>
+        			}<br>
+        			}</p>
+			</div>
+			<p>This, at 700 pixels, gives a layout that looks like this:</p>
+			<div class="example-diagram second">
+				<img src="https://d262ilb51hltx0.cloudfront.net/max/800/0*u9tW-92cbqmJHdON.png">
+				<p class="discription">Two columns wide each, with one column to the right.</p>
+			</div>
+			<p>We can have as many break points in our layouts as we need to. It just depends on what your app’s needs are.</p>
+			<p>I hope this has helped in your understanding of susy breakpoints and RWD breakpoints in general. Like I said, I’m still figuring this out myself, but anyway, thanks for reading!</p>
+		</div>
+	</main>
+	<footer>
+		
+	</footer>
+</body>
