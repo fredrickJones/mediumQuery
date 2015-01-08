@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <head>
+	<meta charset="utf-8">
 	<title>https://medium.com/@roblcopeland/understanding-rwd-breakpoints-fc4f72cd8b57</title>
 	<link rel="stylesheet" type="text/css" href="normalize.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<header>
-		<div class="header--logo">
-			<span class="logo"></span>
+	<header class="header">
+		<div class="header--nav">
+			<div class="column float-left">
+				<img class="logo" src="images/logo.png">
+			</div>
+			<div class="column float-right">
+				<img class="search" src="images/search.png">
+				<img class="sign-in" src="images/sign-in.png">
+			</div>
 		</div>
 	</header>
-	<section>
-		<div class="top-image">
-			<img class="title--image" src="https://d262ilb51hltx0.cloudfront.net/fit/t/1200/504/0*Dtzv_xYGpIbRatig.png">
-		</div>
-	</section>
-	<main>
+	<div class="top-image">
+	</div>
+
+	<main class="content-area">
 		<div class="headline">
 			<h1>Understanding RWD Breakpoints</h1>
 			<h3>and then doing them in Susy</h3>
@@ -28,22 +33,9 @@
 			<p>In plain ‘ol CSS, you would implement your break point using a media query, but using SASS, Compass, and Susy we can do better.</p>
 			<p>Using Susy in a Compass project, we would likely have a default layout setup like this:(fyi, I’m using .scss syntax)</p>
 			<div class="box-out">
-				<p>// grid defaults<br>
-					$total-columns: 5;<br>
-					$column-width: 6em;<br>
-					$gutter-width: 1em;<br>
-					$grid-padding: $gutter-width;</p>
-				<p>.page {<br>
-				     //a mixin to let me see the grid<br>
-     				@include susy-grid-background;<br>
-     				// setup the containing element<br>
-     				@include container;</p>
-     			<p>.one,.two {<br>
-     				@include pre(1);<br>
-       				@include span-columns(3 omega);<br>
-        			@include post(1);<br>
-        			}<br>
-        			}</p>
+				<p>// grid defaults<br>$total-columns: 5;<br>$column-width: 6em;<br>$gutter-width: 1em;<br>$grid-padding: $gutter-width;</p>
+				<p>.page {<br>	//a mixin to let me see the grid<br>	@include susy-grid-background;<br>	// setup the containing element<br>	@include container;</p>
+     			<p>	.one,.two {<br>		@include pre(1);<br>		@include span-columns(3 omega);<br>		@include post(1);<br>	}<br>}</p>
 			</div>
 			<p>That gives me a layout that looks like this:</p>
 			<div class="example-diagram first">
@@ -58,30 +50,10 @@
 			<p>What I want to do is to use the at-breakpoint mixin to tell SASS that at the $wide breakpoint, that .one and .two should no longer have a pre(1) and should span two columns each, side-by-side.</p>
 			<p>I can do that like this:</p>
 			<div class="box-out">
-				<p>// grid defaults<br>
-					$total-columns: 5;<br>
-					$column-width: 6em;<br>
-					$gutter-width: 1em;<br>
-					$grid-padding: $gutter-width;</p>
-				<p><strong>// breakpoints<br>
-					$wide: 700px 5;</strong></p>
-				<p>.page {<br>
-				     //a mixin to let me see the grid<br>
-     				@include susy-grid-background;<br>
-     				// setup the containing element<br>
-     				@include container;</p>
-     			<p>.one,.two {<br>
-     				@include pre(1);<br>
-       				@include span-columns(3 omega);<br>
-        			@include post(1);<br>
-        			<strong>@include at-breakpoint($wide) {<br>
-					//remove column width margin-left<br>
-					@include pre(0);<br>
-					//remove omega, we get side-by-side<br>
-					@include span-columns(2);<br>
-					}</strong><br>
-        			}<br>
-        			}</p>
+				<p>// grid defaults<br>$total-columns: 5;<br>$column-width: 6em;<br>$gutter-width: 1em;<br>$grid-padding: $gutter-width;</p>
+				<p><strong>// breakpoints<br>$wide: 700px 5;</strong></p>
+				<p>.page {<br>	//a mixin to let me see the grid<br>	@include susy-grid-background;<br>	// setup the containing element<br>	@include container;</p>
+     			<p>	.one,.two {<br>		@include pre(1);<br>		@include span-columns(3 omega);<br>		@include post(1);<br>		<strong>@include at-breakpoint($wide) {<br>			//remove column width margin-left<br>			@include pre(0);<br>			//remove omega, we get side-by-side<br>			@include span-columns(2);<br>		}</strong><br>	}<br>}</p>
 			</div>
 			<p>This, at 700 pixels, gives a layout that looks like this:</p>
 			<div class="example-diagram second">
